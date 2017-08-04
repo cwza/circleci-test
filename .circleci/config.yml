@@ -9,7 +9,7 @@ jobs:
       - deploy:
           name: Docker Provision
           command: |
-            if [[ -z "${HARBORMASTER_BUILD_TARGET_PHID}" && "${CIRCLE_BRANCH}" == "master" ]]; then
+            if [[ -z "${HARBORMASTER_BUILD_TARGET_PHID}" ]]; then
               chmod +x ./.circleci/deploy-docker.sh
               ./.circleci/deploy-docker.sh
             fi
