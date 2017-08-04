@@ -23,6 +23,18 @@ func TestPing(t *testing.T) {
 	assert.Equal(t, expected, *res)
 }
 
+func TestPing2(t *testing.T) {
+	serverListener, server := newGrpcServer(t)
+	clientConn, client := newGrpcClient(t, serverListener.Addr().String())
+	defer closeAll(t, clientConn, server, serverListener)
+
+	value := "testtest"
+	expected := proto.PingResponse{Value: &value}
+	res, err := client.Ping(context.Background(), &proto.PingRequest{Value: &value})
+	require.NoError(t, err, "should not have error while Ping")
+	assert.Equal(t, expected, *res)
+}
+
 func newGrpcServer(t *testing.T) (net.Listener, *grpc.Server) {
 	////// Grpc Server
 	grpcLis, err := net.Listen("tcp", ":0")
@@ -33,15 +45,22 @@ func newGrpcServer(t *testing.T) (net.Listener, *grpc.Server) {
 
 	//////// Serve
 	go func() {
-		err := grpcServer.Serve(grpcLis)
-		require.NoError(t, err, "must not error while grpc server serve")
+		grpcServer.Serve(grpcLis)
+		// require.NoError(t, err, "must not error while grpc server serve")
 	}()
 	return grpcLis, grpcServer
 }
 
-func newGrpcClient(t *testing.T, serverAddr string) (*grpc.ClientConn, proto.TestServiceClient) {
+func newGrpcClient(t *testing.T, addr string) (*grpc.ClientConn, proto.TestServiceClient) {
+	var port string
+	for i := len(addr) - 1; i > 0; i-- {
+		if addr[i] == ':' {
+			port = addr[i+1:]
+			break
+		}
+	}
 	clientConn, err := grpc.Dial(
-		serverAddr,
+		"127.0.0.1:"+port,
 		grpc.WithInsecure(),
 		grpc.WithBlock(),
 	)
