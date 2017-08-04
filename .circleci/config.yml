@@ -6,7 +6,7 @@ jobs:
       - image: circleci/golang:1.8
     steps:
       - checkout
-      - make test
+      - run: make test
       - deploy:
           name: Docker Provision
           command: |
