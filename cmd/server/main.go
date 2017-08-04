@@ -6,16 +6,9 @@ import (
 	"os"
 
 	"github.com/cwza/circleci-test/pkg/proto"
-	"golang.org/x/net/context"
+	"github.com/cwza/circleci-test/pkg/service"
 	"google.golang.org/grpc"
 )
-
-type TestService struct{}
-
-func (s *TestService) Ping(ctx context.Context, req *proto.PingRequest) (*proto.PingResponse, error) {
-	value := req.GetValue()
-	return &proto.PingResponse{Value: &value}, nil
-}
 
 func main() {
 	port := os.Getenv("PORT")
@@ -29,7 +22,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	proto.RegisterTestServiceServer(grpcServer, &TestService{})
+	proto.RegisterTestServiceServer(grpcServer, &service.TestService{})
 
 	if err := grpcServer.Serve(grpcLis); err != nil {
 		log.Fatalf("failed to serve: %+v", err)
