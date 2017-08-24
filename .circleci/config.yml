@@ -40,7 +40,6 @@ jobs:
       - run: echo "./.circleci/docker-deploy-service2.sh"
       - run: echo "./.circleci/kubernetes-deploy-service2.sh"
 
-
 workflows:
   version: 2
   build-workflow:
