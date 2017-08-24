@@ -65,18 +65,15 @@ workflows:
             - test_integration
           filters:
             tags:
-              only: /.*/
+              only: /v[0-9]+(\.[0-9]+)*/
           #   branches:
           #     only: master
       - deploy_service2:
           requires:
             - test_integration
           filters:
-            tags:
-              only: /.*/
-          # filters:
-          #   branches:
-          #     only: master
+            branches:
+              only: master
 
 
 # version: 2
