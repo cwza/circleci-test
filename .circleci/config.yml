@@ -45,13 +45,22 @@ workflows:
   version: 2
   build-workflow:
     jobs:
-      - test_unit
+      - test_unit:
+          filters:
+            tags:
+              only: /.*/
       - test:
           requires:
             - test_unit
+          filters:
+            tags:
+              only: /.*/
       - test_integration:
           requires:
             - test
+          filters:
+            tags:
+              only: /.*/
       - deploy_service1:
           requires:
             - test_integration
@@ -63,6 +72,9 @@ workflows:
       - deploy_service2:
           requires:
             - test_integration
+          filters:
+            tags:
+              only: /.*/
           # filters:
           #   branches:
           #     only: master
