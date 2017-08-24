@@ -1,7 +1,10 @@
 TEST_PACKAGES := $(shell go list ./... | grep -vE '(vendor|cmd|mock|proto|integrationtest)')
 
-test:
-	go test ${TEST_PACKAGES}
+test-unit:
+	echo "test-unit"
 
-proto:
-	protoc --go_out=plugins=grpc:. ./pkg/proto/*.proto
+test:
+	echo "test"
+
+test-integration:
+	echo "test-integration"
