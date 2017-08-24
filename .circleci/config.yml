@@ -55,7 +55,9 @@ workflows:
       - deploy_service1:
           requires:
             - test_integration
-          # filters:
+          filters:
+            tags:
+              only: /.*/
           #   branches:
           #     only: master
       - deploy_service2:
