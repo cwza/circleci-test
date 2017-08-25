@@ -7,21 +7,15 @@ jobs:
     steps:
       - checkout
       - run: echo "make test-unit"
-  test:
+  test_long:
     working_directory: /go/src/github.com/cwza/circleci-test
     docker:
       - image: circleci/golang:1.8
     steps:
       - checkout
       - run: echo "make test"
-  test_integration:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
-    steps:
-      - checkout
       - run: echo "make test-integration"
-  deploy_service1:
+  docker_deploy_service1:
     working_directory: /go/src/github.com/cwza/circleci-test
     docker:
       - image: circleci/golang:1.8
@@ -29,8 +23,13 @@ jobs:
       - checkout
       - run: echo "make build-service1"
       - run: echo "./.circleci/docker-deploy-service1.sh"
+  kubernetes_deploy_service1:
+    working_directory: /go/src/github.com/cwza/circleci-test
+    docker:
+      - image: circleci/golang:1.8
+    steps:
       - run: echo "./.circleci/kubernetes-deploy-service1.sh"
-  deploy_service2:
+  docker_deploy_service2:
     working_directory: /go/src/github.com/cwza/circleci-test
     docker:
       - image: circleci/golang:1.8
@@ -38,7 +37,12 @@ jobs:
       - checkout
       - run: echo "make build-service2"
       - run: echo "./.circleci/docker-deploy-service2.sh"
-      - run: echo "./.circleci/kubernetes-deploy-service2.sh"
+  kubernetes_deploy_service2:
+    working_directory: /go/src/github.com/cwza/circleci-test
+      docker:
+        - image: circleci/golang:1.8
+      steps:
+        - run: echo "./.circleci/kubernetes-deploy-service2.sh"
 
 workflows:
   version: 2
@@ -48,29 +52,33 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test:
+      - test_long:
           requires:
             - test_unit
           filters:
             tags:
               only: /.*/
-      - test_integration:
+      - docker_deploy_service1:
           requires:
-            - test
-          filters:
-            tags:
-              only: /.*/
-      - deploy_service1:
-          requires:
-            - test_integration
+            - test_long
           filters:
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
-          #   branches:
-          #     only: master
-      - deploy_service2:
+      - kubernetes_deploy_service1:
           requires:
-            - test_integration
+            - docker_deploy_service1
+          filters:
+            branches:
+              only: master
+      - docker_deploy_service2:
+          requires:
+            - test_long
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+      - kubernetes_deploy_service2:
+          requires:
+            - docker_deploy_service2
           filters:
             branches:
               only: master
