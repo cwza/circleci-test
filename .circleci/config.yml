@@ -5,7 +5,7 @@ defaults: &DEFAULT
         environment:
             GOPATH: /go
 
-defaults2: &DEFAULT2
+defaults: &DEFAULT2
   working_directory: /go/src/github.com/cwza/circleci-test
     docker:
         - image: circleci/golang:1.8
