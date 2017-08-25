@@ -1,21 +1,14 @@
-defaults: &DEFAULT
+defaults: &defaults
   working_directory: /go/src/github.com/cwza/circleci-test
   docker:
       - image: circleci/golang:1.8
         environment:
             GOPATH: /go
 
-defaults: &DEFAULT2
-  working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-        - image: circleci/golang:1.8
-          environment:
-              GOPATH: /gogo
-
 version: 2
 jobs:
   cache_workspace:
-    <<: *DEFAULT
+    <<: *defaults
     steps:
       - checkout
       - persist_to_workspace:
@@ -23,7 +16,7 @@ jobs:
           paths:
             - ./
   test_unit:
-    <<: *DEFAULT2
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ./
@@ -31,7 +24,7 @@ jobs:
       - run: ls -al
       - run: echo "make test-unit"
   test_long:
-    <<: *DEFAULT
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ./
@@ -40,7 +33,7 @@ jobs:
       - run: echo "make test"
       - run: echo "make test-integration"
   docker_deploy_service1:
-    <<: *DEFAULT
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ./
@@ -49,7 +42,7 @@ jobs:
       - run: echo "make build-service1"
       - run: echo "./.circleci/docker-deploy-service1.sh"
   kubernetes_deploy_service1:
-    <<: *DEFAULT
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ./
@@ -57,7 +50,7 @@ jobs:
       - run: ls -al
       - run: echo "./.circleci/kubernetes-deploy-service1.sh"
   docker_deploy_service2:
-    <<: *DEFAULT
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ./
@@ -66,7 +59,7 @@ jobs:
       - run: echo "make build-service2"
       - run: echo "./.circleci/docker-deploy-service2.sh"
   kubernetes_deploy_service2:
-    <<: *DEFAULT
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ./
