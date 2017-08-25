@@ -1,47 +1,48 @@
+defaults: &DEFAULT
+  working_directory: /go/src/github.com/cwza/circleci-test
+  docker:
+      - image: circleci/golang:1.8
+        environment:
+            GOPATH: /go
+
 version: 2
 jobs:
   test_unit:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
+    <<: *DEFAULT
     steps:
       - checkout
+      - run: echo $GOPATH
       - run: echo "make test-unit"
   test_long:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
+    <<: *DEFAULT
     steps:
       - checkout
+      - run: echo $GOPATH
       - run: echo "make test"
       - run: echo "make test-integration"
   docker_deploy_service1:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
+    <<: *DEFAULT
     steps:
       - checkout
+      - run: echo $GOPATH
       - run: echo "make build-service1"
       - run: echo "./.circleci/docker-deploy-service1.sh"
   kubernetes_deploy_service1:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
+    <<: *DEFAULT
     steps:
       - run: echo "./.circleci/kubernetes-deploy-service1.sh"
   docker_deploy_service2:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
+    <<: *DEFAULT
     steps:
       - checkout
+      - run: echo $GOPATH
       - run: echo "make build-service2"
       - run: echo "./.circleci/docker-deploy-service2.sh"
   kubernetes_deploy_service2:
-    working_directory: /go/src/github.com/cwza/circleci-test
-    docker:
-      - image: circleci/golang:1.8
+    <<: *DEFAULT
     steps:
+      - checkout
+      - run: echo $GOPATH
       - run: echo "./.circleci/kubernetes-deploy-service2.sh"
 
 workflows:
