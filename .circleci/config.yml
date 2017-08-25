@@ -5,6 +5,13 @@ defaults: &DEFAULT
         environment:
             GOPATH: /go
 
+defaults2: &DEFAULT2
+  working_directory: /go/src/github.com/cwza/circleci-test
+    docker:
+        - image: circleci/golang:1.8
+          environment:
+              GOPATH: /gogo
+
 version: 2
 jobs:
   cache_workspace:
@@ -16,7 +23,7 @@ jobs:
           paths:
             - ./
   test_unit:
-    <<: *DEFAULT
+    <<: *DEFAULT2
     steps:
       - attach_workspace:
           at: ./
