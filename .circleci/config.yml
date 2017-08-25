@@ -10,6 +10,7 @@ jobs:
   cache_workspace:
     <<: *DEFAULT
     steps:
+      - checkout
       - persist_to_workspace:
           root: ./
           paths:
