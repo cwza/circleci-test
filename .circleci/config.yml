@@ -11,14 +11,14 @@ jobs:
     <<: *DEFAULT
     steps:
       - persist_to_workspace:
-          root: workspace
+          root: ./
           paths:
             - echo-output
   test_unit:
     <<: *DEFAULT
     steps:
       - attach_workspace:
-          at: /go/src/github.com/cwza/circleci-test
+          at: ./
       - run: echo $GOPATH
       - run: ls -al
       - run: echo "make test-unit"
@@ -26,7 +26,7 @@ jobs:
     <<: *DEFAULT
     steps:
       - attach_workspace:
-          at: /go/src/github.com/cwza/circleci-test
+          at: ./
       - run: echo $GOPATH
       - run: ls -al
       - run: echo "make test"
@@ -35,7 +35,7 @@ jobs:
     <<: *DEFAULT
     steps:
       - attach_workspace:
-          at: /go/src/github.com/cwza/circleci-test
+          at: ./
       - run: echo $GOPATH
       - run: ls -al
       - run: echo "make build-service1"
@@ -44,7 +44,7 @@ jobs:
     <<: *DEFAULT
     steps:
       - attach_workspace:
-          at: /go/src/github.com/cwza/circleci-test
+          at: ./
       - run: echo $GOPATH
       - run: ls -al
       - run: echo "./.circleci/kubernetes-deploy-service1.sh"
@@ -52,7 +52,7 @@ jobs:
     <<: *DEFAULT
     steps:
       - attach_workspace:
-          at: /go/src/github.com/cwza/circleci-test
+          at: ./
       - run: echo $GOPATH
       - run: ls -al
       - run: echo "make build-service2"
@@ -61,7 +61,7 @@ jobs:
     <<: *DEFAULT
     steps:
       - attach_workspace:
-          at: /go/src/github.com/cwza/circleci-test
+          at: ./
       - run: echo $GOPATH
       - run: ls -al
       - run: echo "./.circleci/kubernetes-deploy-service2.sh"
