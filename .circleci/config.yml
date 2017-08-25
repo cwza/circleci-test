@@ -7,42 +7,63 @@ defaults: &DEFAULT
 
 version: 2
 jobs:
+  cache_workspace:
+    <<: *DEFAULT
+    steps:
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - echo-output
   test_unit:
     <<: *DEFAULT
     steps:
-      - checkout
+      - attach_workspace:
+          at: /go/src/github.com/cwza/circleci-test
       - run: echo $GOPATH
+      - run: ls -al
       - run: echo "make test-unit"
   test_long:
     <<: *DEFAULT
     steps:
-      - checkout
+      - attach_workspace:
+          at: /go/src/github.com/cwza/circleci-test
       - run: echo $GOPATH
+      - run: ls -al
       - run: echo "make test"
       - run: echo "make test-integration"
   docker_deploy_service1:
     <<: *DEFAULT
     steps:
-      - checkout
+      - attach_workspace:
+          at: /go/src/github.com/cwza/circleci-test
       - run: echo $GOPATH
+      - run: ls -al
       - run: echo "make build-service1"
       - run: echo "./.circleci/docker-deploy-service1.sh"
   kubernetes_deploy_service1:
     <<: *DEFAULT
     steps:
+      - attach_workspace:
+          at: /go/src/github.com/cwza/circleci-test
+      - run: echo $GOPATH
+      - run: ls -al
       - run: echo "./.circleci/kubernetes-deploy-service1.sh"
   docker_deploy_service2:
     <<: *DEFAULT
     steps:
-      - checkout
+      - attach_workspace:
+          at: /go/src/github.com/cwza/circleci-test
       - run: echo $GOPATH
+      - run: ls -al
       - run: echo "make build-service2"
       - run: echo "./.circleci/docker-deploy-service2.sh"
   kubernetes_deploy_service2:
     <<: *DEFAULT
     steps:
-      - checkout
+      - attach_workspace:
+          at: /go/src/github.com/cwza/circleci-test
       - run: echo $GOPATH
+      - run: ls -al
       - run: echo "./.circleci/kubernetes-deploy-service2.sh"
 
 workflows:
